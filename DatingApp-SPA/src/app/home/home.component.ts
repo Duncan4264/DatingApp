@@ -10,14 +10,22 @@ export class HomeComponent implements OnInit {
   registerMode = false;
   values: any;
   constructor(private http: HttpClient) { }
-
+  
+  /*
+  * Get the values once home page starts
+  */
   ngOnInit() {
     this.getValues();
   }
-
+  /*
+  * Method to handle register toggle
+  */
   registerToggle(){
     this.registerMode = true;
   }
+  /*
+  * Method to get all of the values in the API
+  */
   getValues() {
     this.http.get('http://localhost:5000/api/values').subscribe(response => {
       this.values = response;
@@ -25,6 +33,9 @@ export class HomeComponent implements OnInit {
       console.log(error);
     });
   }
+  /*
+  * Method to handle canceling the register mode
+  */
   cancelRegisterMode(registerMode: boolean)
   {
     this.registerMode = registerMode;
