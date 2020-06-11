@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Component({
   selector: 'app-nav',
@@ -9,7 +10,7 @@ import { AuthService } from '../_services/auth.service';
 export class NavComponent implements OnInit {
   model: any = {};
 
-  constructor(private AuthService: AuthService) { }
+  constructor(public authService: AuthService, private alertify: AlertifyService) { }
 
   ngOnInit() {
   }
@@ -18,12 +19,12 @@ export class NavComponent implements OnInit {
    */
   login(){
     // Subscribe to the auth service if successfull
-    this.AuthService.login(this.model).subscribe(next => {
+    this.authService.login(this.model).subscribe(next => {
       // Log logged in successfully
-      console.log('Logged in successfully');
+      this.alertify.success('Logged in successfully');
       // return error if logged in incorrectly
     }, error => {
-      console.log(error);
+      this.alertify.error(error);
     });
   }
   /*
@@ -32,10 +33,7 @@ export class NavComponent implements OnInit {
 
   loggedIn()
   {
-    // get the token from local storage
-    const token = localStorage.getItem('token');
-    // return true or false
-    return !!token;
+    return this.authService.loggedIn();
   }
   /*
   * Method to handle logging out
@@ -45,7 +43,7 @@ export class NavComponent implements OnInit {
     // delete the web token from local storage
     localStorage.removeItem('token');
     // log logging out
-    console.log('logged out');
+    this.alertify.message('logged out');
   }
 
 }
